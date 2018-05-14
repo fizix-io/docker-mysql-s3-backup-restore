@@ -1,0 +1,7 @@
+#!/bin/sh
+
+TMP_FILE=/tmp/dump.sql.gz
+
+mysqldump --protocol tcp -u $MYSQL_USER -h $MYSQL_HOST -p$MYSQL_PASSWORD --all-databases | gzip > $TMP_FILE && \
+  aws s3 cp $TMP_FILE s3://$S3_BUCKET/$BASE_PATH.sql.gz && \
+  rm $TMP_FILE
